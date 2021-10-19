@@ -1,21 +1,18 @@
-Okay what the fuck are we going to do?
+# MADPy
+### <ins>M</ins>easure <ins>A</ins>mplitude and <ins>D</ins>uration in <ins>Py</ins>thon 
+#### Intended for seismic time series analysis
 
-Each trace needs earthquake location (xyzt) and station location (xyz) 
-coordinates: decimal degrees
-depth/elevation: km
+_____
 
-Each trace needs the origin time, P- and S- arrivals
-origin time: UTCDateTime (obspy object)
-arrivals: seconds since origin time
-The trace data must include all arrivals
 
-duration MUST BE time between p arrival and until end of noise window
+<p>This is a Python-based tool that measures the amplitude and duration of a seismogram. The amplitudes and durations can be used in many seismic applications, such as magnitude calculation and seismic source discrimination.</p>
 
-if end_fit_threshold == absolute, then the fit goes until end_fit_wrt_noise, then where the line intersects with duration_absolute_threshold is the duration
+<p>MADPy relies heavily on <a href=https://github.com/obspy/obspy>Obspy</a>. The tool reads in Obspy Stream objects for measurement. Each Stream is comprised of Obspy Traces for each seismogram. The Trace must include the origin time, P- arrival, and S- arrival. Additionally, the Trace data must be pre-processed and ready for measurement. This tool does not include any post-processing.</p>
 
-if end_fit_threshold == noise, then the fit goes until end_fit_wrt_noise, then where the line intersects with duration_prep_noise is the duration
+*Amplitude*
+<p>The amplitude is defined as half the maximum peak-to-peak amplitude of the seismogram following <a href=https://doi.org/10.1785/0120060114>Pechmann et al. (2007)</a>. This is calculated by finding the maximum difference between inflection points. The signal to noise ratio is calculated for each amplitude measurement for quality control. </p>
 
-start_fit_wrt_max is an int and represents the fraction. so if 4, it means 1/4. if it equals 1, that means start at max amplitude. cannot equal 0.
+*Duration*
+<p>The duration is defined as the time from the P- arrival until the seismic energy reaches a user-specified energy threshold. A brief description of the method can be found in <a href=https://doi.org/10.1785/0120200188>Koper et al. (2021)</a>. It is calculated by fitting a line to the coda envelope in log space. The correlation coefficient between the line and the data is calculated for each duration measurement for quality control. </p>
 
-PLOT_PHASE in plotting.py refers to what phase the time axis is relative to.
-
+The user can define measurement windows and other parameters in the [config](madpy/config.py) file.
