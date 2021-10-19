@@ -7,6 +7,7 @@ depth/elevation: km
 Each trace needs the origin time, P- and S- arrivals
 origin time: UTCDateTime (obspy object)
 arrivals: seconds since origin time
+The trace data must include all arrivals
 
 duration MUST BE time between p arrival and until end of noise window
 
