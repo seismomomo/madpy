@@ -11,6 +11,7 @@ import warnings
 import numpy as np
 import pandas as pd
 from typing import Tuple
+import matplotlib.pyplot as plt
 from scipy.signal import hilbert
 from threadpoolctl import threadpool_limits
 from scipy.optimize import lsq_linear as lsq
@@ -28,7 +29,7 @@ def measure_duration(
     ptype: str ='log', 
     save_output: bool = False, 
     outfile: str = None
-) -> pd.DataFrame:
+) -> Tuple[pd.DataFrame, plt.figure]:
     """Measure noise level and duration
 
     Args:
@@ -39,36 +40,25 @@ def measure_duration(
         
     Returns:
         df: dataframe of time series duration information
+        fig: duration figure
 
     """    
     
-    # Initialize table
-    output = []
-    
+    output = []   
     for tr in st:
         
-        # Preliminary checks
         preliminary_checks(tr, ptype, save_output, outfile, cfg)
-    
-        # Measure noise
         noise = n.rms_noise(tr.copy(), 'duration', cfg)
-        
-        # Measure duration
-        duration = coda_duration(tr.copy(), noise, ptype, cfg)
-        
-        # Add to data 
+        duration, cc, fig = coda_duration(tr.copy(), noise, ptype, cfg)
         output.append([str(tr.stats.o.date), str(tr.stats.o.time)[:11],
                        tr.stats.network, tr.stats.station, tr.stats.channel,
-                       duration[0], duration[1], noise])
-        
-    # Format output
+                       duration, cc, noise])
+
     df = format_output(output)
-    
-    # Save if desired
     if save_output:
         df.to_csv(f'{outfile}', float_format='%0.5f', index=False)
         
-    return df
+    return df, fig
 
 
 def preliminary_checks(
@@ -110,7 +100,7 @@ def coda_duration(
     noise: float, 
     ptype: str, 
     cfg: types.ModuleType = config
-) -> Tuple[float, float]:    
+) -> Tuple[float, float, plt.figure]:    
     """Measure duration and associate quality control
     
     Args:
@@ -121,7 +111,8 @@ def coda_duration(
         
     Returns:
         dur: duration in seconds
-        cc: correlation coefficient 
+        cc: correlation coefficient
+        fig: duration figure
     
     """
 
@@ -137,11 +128,13 @@ def coda_duration(
                                      fit_begin, i_dur)
     
     if dcfg.plot:
-        plot.duration_plot(tr, avg_time, avg_data_lin, avg_data_log, 
-                           fit_begin, fit_end, dur, cc, coda_line, 
-                           noise, ptype, dcfg)
+        fig = plot.duration_plot(tr, avg_time, avg_data_lin, avg_data_log, 
+                                 fit_begin, fit_end, dur, cc, coda_line, 
+                                 noise, ptype, dcfg)
+    else:
+        fig = None
    
-    return dur, cc
+    return dur, cc, fig
 
 
 def moving_average(

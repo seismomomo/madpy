@@ -15,7 +15,7 @@ from matplotlib.path import Path
 import madpy.plotting.utils as util
 import madpy.plotting.params as params
 
-PLOT_PHASE = 'P'
+PLOT_PHASE = 'O'
 
 def amplitude_plot(tr_full, tr_signal, amp, indices, noise):
     """Generate amplitude plot"""
@@ -29,9 +29,9 @@ def amplitude_plot(tr_full, tr_signal, amp, indices, noise):
 
     # plot parameters
     pp = params.amplitude_plot_parameters()
-    xlabel = 'Time relative to origin'
-    ylabel = 'Displacement (mm)'
-    title = '{}: A = {:0.3f} mm, SNR = {:0.3f}'.format(
+    xlabel = 'Time'
+    ylabel = 'Ground motion'
+    title = '{}: A = {:0.3f}, SNR = {:0.3f}'.format(
         tr_full.id, amp, amp / noise)    
     
     # plot
@@ -63,6 +63,10 @@ def amplitude_plot(tr_full, tr_signal, amp, indices, noise):
     ax.set_yticks(yinfo['ticks'])
     ax.set_yticklabels(yinfo['ticklabels'])
     ax.set_title(title)
+    plt.tight_layout()
+    plt.close()
+    
+    return fig
     
     
 def relative_p2p_indices(tr_full, tr_signal, indices):

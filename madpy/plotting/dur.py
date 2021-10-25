@@ -6,15 +6,11 @@ import matplotlib.pyplot as plt
 from matplotlib.path import Path
 
 # Local 
-# import PlotParameters
-# import madpy.noise as n
-# import madpy.config as config
 import madpy.duration as duration
 import madpy.plotting.utils as util
 import madpy.plotting.params as params
-# import madpy.amplitude as amplitude
 
-PLOT_PHASE = 'P'
+PLOT_PHASE = 'O'
 
 
 def duration_plot(tr, avg_time, avg_data_lin, avg_data_log, 
@@ -34,20 +30,20 @@ def duration_plot(tr, avg_time, avg_data_lin, avg_data_log,
     
     # plot parameters
     pp = params.duration_plot_parameters()
-    xlabel = 'Time relative to origin'
+    xlabel = 'Time'
     title = r'$\tau$ = {:0.3f} s, CC = –{:0.2f}'.format(dur, np.abs(cc))
     if ptype == 'linear':
         full_data = tr.data
         avg_data = avg_data_lin
         yinfo = format_duration_yaxis(time, tr, xinfo, 20, 2, 
                                       ptype, '{:0.1E}')
-        ylabel = 'Velocity (m/s)'
+        ylabel = 'Ground motion (linear)'
     elif ptype == 'log':
         full_data = duration.log_envelope(tr.data)
         avg_data = avg_data_log
         yinfo = format_duration_yaxis(time, tr, xinfo, 20, 4, 
                                       ptype, '{:0.0f}')
-        ylabel = r'$log_{10}$ velocity (m/s)'
+        ylabel = 'Ground motion (log)'
         
     # plot
     fig, ax = plt.subplots(figsize=(8,4))
@@ -78,6 +74,10 @@ def duration_plot(tr, avg_time, avg_data_lin, avg_data_log,
     ax.set_yticks(yinfo['ticks'])
     ax.set_yticklabels(yinfo['ticklabels'])
     ax.set_title(title)
+    plt.tight_layout()
+    plt.close()
+    
+    return fig
     
                
 def format_duration_yaxis(time, tr, xinfo, yspace, nint, ptype, label_format):

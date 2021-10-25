@@ -10,6 +10,7 @@ import types
 import numpy as np
 import pandas as pd
 from typing import Tuple
+import matplotlib.pyplot as plt
 
 # Local 
 import madpy.noise as n
@@ -23,7 +24,7 @@ def measure_amplitude(
     cfg: types.ModuleType = config, 
     save_output: bool = False, 
     outfile: str = None
-) -> pd.DataFrame:
+) -> Tuple[pd.DataFrame, plt.figure]:
     """Measure noise level and amplitude
 
     Args:
@@ -34,36 +35,25 @@ def measure_amplitude(
         
     Returns:
         df: dataframe of time series amplitude information
+        fig: amplitude figure
 
     """
     
-    # Initialize table
     output = []
-    
     for tr in st:
     
-        # Run preliminary checks
         preliminary_checks(tr, save_output, outfile, cfg)
-        
-        # Measure noise
         noise = n.rms_noise(tr, 'amplitude', cfg)
-        
-        # Measure amplitude
-        amplitude = max_amplitude(tr, noise, cfg)
-        
-        # Add to data #np.sqrt((amplitude/snr)**2)
+        amplitude, fig = max_amplitude(tr, noise, cfg)
         output.append([str(tr.stats.o.date), str(tr.stats.o.time)[:11],
                        tr.stats.network, tr.stats.station, tr.stats.channel,
                        amplitude, noise])
         
-    # Format output
     df = format_output(output)
-    
-    # Save if desired
     if save_output:
         df.to_csv(f'{outfile}', float_format='%0.5f', index=False)
         
-    return df
+    return df, fig
 
 
 def preliminary_checks(
@@ -102,7 +92,7 @@ def max_amplitude(
     tr: obspy.Trace, 
     noise: float, 
     cfg: types.ModuleType = config
-) -> float:
+) -> Tuple[float, plt.figure]:
     """Measure maximum peak-to-peak amplitude
     
     Args:
@@ -112,6 +102,7 @@ def max_amplitude(
     
     Returns: 
         amp: maximum peak-to-peak amplitude
+        fig: amplitude figure
         
     Raises:
         ValueError: if max amplitude is not real and positive
@@ -128,9 +119,11 @@ def max_amplitude(
     acfg = config.Amplitude()
     if acfg.plot:
         indices = p2p_indices(tr_signal, peaks, p2p_amplitudes)
-        plot.amplitude_plot(tr, tr_signal, amp, indices, noise)      
+        fig = plot.amplitude_plot(tr, tr_signal, amp, indices, noise)
+    else:
+        fig = None
         
-    return amp
+    return amp, fig
 
 
 def trim_waveform_signal(
