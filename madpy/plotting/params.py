@@ -1,6 +1,6 @@
 import matplotlib
 params = {
-    'text.latex.preamble': ['\\usepackage{gensymb}'],
+    'text.latex.preamble': r'\usepackage{bm} \usepackage{amsmath}',
     'image.origin': 'lower',
     'image.interpolation': 'nearest',
     'image.cmap': 'gray',
