@@ -26,8 +26,8 @@ def check_config(c):
         if (hasattr(c, 'moving_average_window') and
             hasattr(c, 'start_fit_max') and
             hasattr(c, 'end_fit_noise') and 
-            hasattr(c, 'end_fit_threshold') and
-            hasattr(c, 'duration_prep_noise') and 
+            hasattr(c, 'threshold_type') and
+            hasattr(c, 'duration_noise_threshold') and 
             hasattr(c, 'duration_absolute_threshold')):
             
             check_duration_config(c)
@@ -101,15 +101,15 @@ def check_duration_config(c):
     assert c.end_fit_noise > 0, \
         f'''(ValueError) 
         Coda fitting end {c.end_fit_noise} must be positive'''
-    assert isinstance(c.end_fit_threshold, str), \
+    assert isinstance(c.threshold_type, str), \
         f'''(TypeError) 
-        Coda fitting threshold {c.end_fit_threshold} must be a string'''
-    assert c.end_fit_threshold in ['absolute', 'noise'], \
+        Coda fitting threshold {c.threshold_type} must be a string'''
+    assert c.threshold_type in ['absolute', 'noise'], \
         f'''(ValueError) 
-        Coda fitting threshold {c.end_fit_threshold} not recognized'''
-    assert isinstance(c.duration_prep_noise, float), \
+        Coda fitting threshold {c.threshold_type} not recognized'''
+    assert isinstance(c.duration_noise_threshold, float), \
         f'''(TypeError) 
-        Duration threshold {c.duration_prep_noise} must be a float'''
+        Duration threshold {c.duration_noise_threshold} must be a float'''
     assert isinstance(c.duration_absolute_threshold, float), \
         f'''(TypeError) 
         Duration threshold {c.duration_absolute_threshold} must be a float'''

@@ -20,7 +20,7 @@ class TestAmplitude(unittest.TestCase):
         st[0].stats.p = 10.
         st[0].stats.s = 20.
         
-        df_dur = dur.measure_duration(st, cfg)
+        df_dur,_ = dur.measure_duration(st, cfg)
         self.assertEqual(len(df_dur), len(st))
         self.assertEqual(len(df_dur.columns), 8) 
         
@@ -32,7 +32,7 @@ class TestAmplitude(unittest.TestCase):
         st[0].stats.p = 10.
         st[0].stats.s = 20.
 
-        duration, cc = dur.coda_duration(st[0], 10 ** -10, 'linear', cfg)
+        duration, cc, fig = dur.coda_duration(st[0], 10 ** -10, 'linear', cfg)
         self.assertAlmostEqual(duration, 175, 0)
         self.assertAlmostEqual(cc, -0.72, 2)
         
@@ -180,9 +180,9 @@ class TestAmplitude(unittest.TestCase):
     def test_coda_line_end(self):
         
         self.assertEqual(dur.coda_line_end(cfg.Duration, 10 ** -10), -10)
-        cfg.Duration.end_fit_threshold = 'noise'
+        cfg.Duration.threshold_type = 'noise'
         self.assertAlmostEqual(dur.coda_line_end(cfg.Duration, 10 ** -10), -20)
-        cfg.Duration.end_fit_threshold = 'absolute'
+        cfg.Duration.threshold_type = 'absolute'
         
         
     def test_get_correlation_coefficient(self):

@@ -471,10 +471,10 @@ def coda_line_end(dcfg: config.Duration, noise: float) -> float:
     
     """
     
-    if dcfg.end_fit_threshold == 'absolute':
+    if dcfg.threshold_type == 'absolute':
         threshold = dcfg.duration_absolute_threshold
-    elif dcfg.end_fit_threshold == 'noise':
-        threshold = dcfg.duration_prep_noise * np.log10(noise)
+    elif dcfg.threshold_type == 'noise':
+        threshold = dcfg.duration_noise_threshold * np.log10(noise)
         
     return threshold
  

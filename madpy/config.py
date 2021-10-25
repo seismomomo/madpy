@@ -21,7 +21,7 @@ class Duration:
     moving_average_window: int = 2
     start_fit_max: int = 4
     end_fit_noise: float = 2.
-    end_fit_threshold: str = 'absolute'
-    duration_prep_noise: float = 1.
+    threshold_type: str = 'absolute'
+    duration_noise_threshold: float = 1.
     duration_absolute_threshold: float = -7.763462738511306
     plot: bool = True

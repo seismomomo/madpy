@@ -32,7 +32,7 @@ class TestChecks(unittest.TestCase):
         cfg.Duration.moving_average_window = -2
         self.assertRaises(AssertionError, ch.check_config, cfg.Duration())
         cfg.moving_average_window = 2
-        cfg.end_fit_threshold = 'pre-p noise'
+        cfg.threshold_type = 'pre-p noise'
         self.assertRaises(AssertionError, ch.check_config, cfg.Duration())
         
     def test_check_waveform(self):

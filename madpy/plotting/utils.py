@@ -54,9 +54,9 @@ def format_xaxis(time, t1, t2, nint, ref1, ref2, label_format):
     get xlimits and ticks relative to ref1 and ref2
     """
     
-    xmin = np.int(np.ceil(time[ref1] + t1))
-    xmax_0 = np.int(np.floor(time[ref2] + t2))
-    xint = np.int(np.round((xmax_0 - xmin) / 5))
+    xmin = int(np.ceil(time[ref1] + t1))
+    xmax_0 = int(np.floor(time[ref2] + t2))
+    xint = int(np.round((xmax_0 - xmin) / 5))
     xticks = tick_info(xmin, xmax_0, xint, label_format)
     xmax = np.max(xticks[0])
     

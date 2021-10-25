@@ -20,7 +20,7 @@ class TestAmplitude(unittest.TestCase):
         st[0].stats.p = 10.
         st[0].stats.s = 20.
         
-        df_amp = amp.measure_amplitude(st, cfg)
+        df_amp,_ = amp.measure_amplitude(st, cfg)
         self.assertEqual(len(df_amp), len(st))
         self.assertEqual(len(df_amp.columns), 7)
         
@@ -31,7 +31,7 @@ class TestAmplitude(unittest.TestCase):
         st[0].stats.o = obspy.UTCDateTime('2020-10-10T13:05:00.00')
         st[0].stats.p = 10.
         st[0].stats.s = 20.
-        self.assertEqual(amp.max_amplitude(st[0], 0.1, cfg), 1.6)
+        self.assertEqual(amp.max_amplitude(st[0], 0.1, cfg)[0], 1.6)
         
         
     def test_trim_waveform_signal(self):

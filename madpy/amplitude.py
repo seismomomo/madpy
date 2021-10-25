@@ -113,6 +113,7 @@ def max_amplitude(
     peaks_nan = inflection_points(tr_signal.data)
     peaks = remove_nan(peaks_nan)
     p2p_amplitudes = np.diff(peaks)
+    # TO-DO: Add amplitude factor to config parameters
     amp = np.max(np.abs(p2p_amplitudes)) / 2
     ch.check_amplitude(amp)
     
