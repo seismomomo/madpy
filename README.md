@@ -9,11 +9,20 @@ This is a Python-based tool that measures the amplitude and duration of a seismo
 
 MADPy relies heavily on <a href=https://github.com/obspy/obspy>Obspy</a>. The tool reads in Obspy Stream objects for measurement. Each Trace within the Stream must include the origin time, P- arrival, and S- arrival. Additionally, the Trace data must be pre-processed and ready for measurement. This tool does not include any post-processing. A brief tutorial can be found [here](tutorial/madpy.ipynb).
 
-An example amplitude measurement is shown below:
-<p align="left"><img src=tutorial/amp_figure.png width=650></p>
+<div>
+    <figure style=text-align:left>
+        <img src=tutorial/amp_figure.jpeg width=650>
+        <figcaption>Example amplitude measurement</figcaption>
+    </figure>
+</div>
 
-An example duration measurement is shown below:
-<p align="left"><img src=tutorial/dur_figure.png width=650></p>
+<div>
+    <figure style=text-align:left>
+        <img src=tutorial/dur_figure.jpeg width=650>
+        <figcaption>Example duration measurement</figcaption>
+    </figure>
+</div>
+
 _____
 
 ### Noise Measurement
