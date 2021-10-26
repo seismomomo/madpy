@@ -62,14 +62,14 @@ The duration is defined as the time from the P- arrival until the seismic energy
 
 5. <ins>Measure duration</ins> - The duration occurs where the best fit line from step 4 intercepts a pre-defined ground motion threshold. There are two options for defining this threshold. 
     - __threshold_type__='absolute': The line must cross a static threshold that is specified in __duration_absolute_threshold__. For example, if __duration_absolute_threshold__=-7.7, then the duration is the time between the P- arrival and where the best fit line intersects with -7.7. Be sure to specify this parameter in log space.
-    - __threshold_type__='noise': The line must cross a factor of the noise level that is specfied in __duration_noise_threshold__. For example, if __duration_noise_threshold__=1, then the duration is the time between the P- arrival and where the best fit line intersects with the noise level.<br><br>
+    - __threshold_type__='noise': The line must cross a factor of the noise level that is specfied in __duration_noise_threshold__. For example, if __duration_noise_threshold__=1, then the duration is the time between the P- arrival and where the best fit line intersects with the noise level.<br>
     
     _Note: Oftentimes the best fit line has to be extrapolated to reach the duration threshold. Sometimes, this intersection will occur beyond the waveform segment it is provided. The duration module will raise a Warning if this occurs_.
     
-6. <ins>Calculate correlation coefficient</u> - The Pearson correlation coefficient (CC) between the best fit line and the data is calculated to provide a measure of quality control. The resulting CC value should be negative, since the relationship between time and ground motion is inversely proportional.
+6. <ins>Calculate correlation coefficient</inst> - The Pearson correlation coefficient (CC) between the best fit line and the data is calculated to provide a measure of quality control. The resulting CC value should be negative, since the relationship between time and ground motion is inversely proportional.
 
 7. <ins>Plot</ins> - If __plot__ is set to True, the module will return a duration plot. There are two options for the plot, and both are specified when calling the duration module.
     - 'linear': This option plots the normal time series with the phases and duration marked.
-    - 'log': This option plots the envelope of the waveform that is used for the duration measurement. This plot includes phases, moving average, best fit line, duration, and ground motion threshold. The best fit line will become dashed if it is extrapolated.<br><br>
+    - 'log': This option plots the envelope of the waveform that is used for the duration measurement. This plot includes phases, moving average, best fit line, duration, and ground motion threshold. The best fit line will become dashed if it is extrapolated.<br>
     
     The time axis is relative to PLOT_PHASE, a global parameter set in [dur.py](madpy/plotting/dur.py). The plotting parameters can be changed in [params.py](madpy/plotting/params.py). _Note: The 'log' option is best for debugging. The 'linear' option is best for a quick check_.
