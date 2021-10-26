@@ -11,14 +11,14 @@ MADPy relies heavily on <a href=https://github.com/obspy/obspy>Obspy</a>. The to
 
 <div>
     <figure style=text-align:center>
-        <img src=tutorial/amp_figure.jpeg width=550>
+        <img src=tutorial/amp_figure.jpeg width=550><br>
         <figcaption>Example amplitude measurement</figcaption>
     </figure>
 </div>
 <br><br>
 <div>
     <figure style=text-align:center>
-        <img src=tutorial/dur_figure.jpeg width=550>
+        <img src=tutorial/dur_figure.jpeg width=550><br>
         <figcaption>Example duration measurement</figcaption>
     </figure>
 </div>
