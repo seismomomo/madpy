@@ -7,7 +7,7 @@ _____
 
 This is a Python-based tool that measures the amplitude and duration of a seismogram. The amplitudes and durations can be used in many seismic applications, such as magnitude calculation and seismic source discrimination.
 
-MADPy relies heavily on <a href=https://github.com/obspy/obspy>Obspy</a>. The tool reads in Obspy Stream objects for measurement. Each Trace within the Stream must include the origin time, P- arrival, and S- arrival. Additionally, the Trace data must be pre-processed and ready for measurement. This tool does not include any post-processing. A brief tutorial can be found [here](tutorial/madpy.ipynb).
+MADPy relies heavily on <a href=https://github.com/obspy/obspy>Obspy</a>. The tool reads in Obspy Stream objects for measurement. Each Trace within the Stream must include the origin time, P- arrival, and S- arrival. Additionally, the Trace data must be pre-processed and ready for measurement. This tool does not include any post-processing. A brief tutorial can be found [here](tutorial/madpy.ipynb).<br>
 
 <div>
     <figure style=text-align:center>
