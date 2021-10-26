@@ -66,7 +66,7 @@ The duration is defined as the time from the P- arrival until the seismic energy
     
     _Note: Oftentimes the best fit line has to be extrapolated to reach the duration threshold. Sometimes, this intersection will occur beyond the waveform segment it is provided. The duration module will raise a Warning if this occurs_.
     
-6. <ins>Calculate correlation coefficient</inst> - The Pearson correlation coefficient (CC) between the best fit line and the data is calculated to provide a measure of quality control. The resulting CC value should be negative, since the relationship between time and ground motion is inversely proportional.
+6. <ins>Calculate correlation coefficient</ins> - The Pearson correlation coefficient (CC) between the best fit line and the data is calculated to provide a measure of quality control. The resulting CC value should be negative, since the relationship between time and ground motion is inversely proportional.
 
 7. <ins>Plot</ins> - If __plot__ is set to True, the module will return a duration plot. There are two options for the plot, and both are specified when calling the duration module.
     - 'linear': This option plots the normal time series with the phases and duration marked.
