@@ -32,7 +32,7 @@ The noise level is the root mean square of the data and is calculated for both a
 
 2. <ins>Measure noise</ins> - The noise level is the RMS of the data within the trimmed window. It is used differently for the different measurement types.
     - Amplitude measurements: The noise level can be used as a quality constraint for the amplitude measurement by calculating the signal-to-noise ratio.
-    - Duration measurements: The noise level is used to determine the fitting window for the best fit line. It can be used as a threshold for the duration value (see [Duration Measurement](#Duration measurement) details below).
+    - Duration measurements: The noise level is used to determine the fitting window for the best fit line. It can be used as a threshold for the duration value (see Duration Measurement details below).
 
 _____
 
