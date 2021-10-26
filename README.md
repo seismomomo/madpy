@@ -54,7 +54,7 @@ The duration is defined as the time from the P- arrival until the seismic energy
     
 1. <ins>Apply smoothing</ins> - A moving average is applied to the data before duration measurement. __moving_average_window__ defines the averaging in seconds. For example, __moving_average_window__=2 means a 2-second moving average will be applied to the data. This parameter should be set to 0 if smoothing is not desired.
 
-2. <ins>Convert to envelope</ins> - The coda envelope is calculated by taking the $log_{10}$ of the real part of the Hilbert transform. Bad values are set to NaN at this stage.
+2. <ins>Convert to envelope</ins> - The coda envelope is calculated by taking the log10 of the real part of the Hilbert transform. Bad values are set to NaN at this stage.
 
 3. <ins>Determine fitting window</ins> - The duration is measured using a line that is fit to the envelope data within the fitting window. Conventionally, the fitting window starts at the maximum value of the envelope within __signal_window_begin__ and __signal_window_end__ (with respect to __signal_phase__). The fitting window ends at __end_fit_noise__, which is a factor of the noise. If __end_fit_noise__=2, then the fitting window ends at twice the noise level. For this conventional fitting scheme, __start_fit_max__=1. To start the fitting window elsewhere, relative to the envelope maximum, __start_fit_max__ describes the inverse of the location. For example, __start_fit_max__=4 starts the fitting window 25% of the way between the envelope maximum and __end_fit_noise__. This is useful for envelopes that are curved in log space.
 
