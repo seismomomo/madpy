@@ -3,22 +3,17 @@ utils.py
 
 utility functions for plotting
 """
-# Installed 
-import numpy as np
-from matplotlib import markers
-from scipy.signal import hilbert
-import matplotlib.pyplot as plt
-from matplotlib.path import Path
 
-# Local 
+import numpy as np
 import madpy.noise as n
+from matplotlib import markers
+import matplotlib.pyplot as plt
+from scipy.signal import hilbert
+from matplotlib.path import Path
 
 
 def to_time(tr, phase):
-    
-    """
-    create a time axis
-    """
+    """create a time axis"""
     
     arrival = n.arrival_time_utc(tr, phase)
     shift = arrival - tr.stats.starttime
@@ -28,11 +23,7 @@ def to_time(tr, phase):
 
 
 def relative_phase_indices(tr, time, phase):
-    
-    """
-    return indices for o, p, and s
-    "ref" must be in seconds relative to the time
-    """
+    """return indices for o, p, and s"""
     
     p_utc = n.arrival_time_utc(tr, 'P')
     s_utc = n.arrival_time_utc(tr, 'S')
@@ -40,19 +31,19 @@ def relative_phase_indices(tr, time, phase):
     o_rel = tr.stats.o - ref
     p_rel = p_utc - ref
     s_rel = s_utc - ref
-    i_o = np.where(np.abs(time - o_rel) == np.nanmin(np.abs(time - o_rel)))[0][0]
-    i_p = np.where(np.abs(time - p_rel) == np.nanmin(np.abs(time - p_rel)))[0][0]
-    i_s = np.where(np.abs(time - s_rel) == np.nanmin(np.abs(time - s_rel)))[0][0]
-    # check indices
+    i_o = np.where(np.abs(time - o_rel) == \
+                   np.nanmin(np.abs(time - o_rel)))[0][0]
+    i_p = np.where(np.abs(time - p_rel) == \
+                   np.nanmin(np.abs(time - p_rel)))[0][0]
+    i_s = np.where(np.abs(time - s_rel) == \
+                   np.nanmin(np.abs(time - s_rel)))[0][0]
+    # TO–DO: check indices
     
     return i_o, i_p, i_s
 
 
 def format_xaxis(time, t1, t2, nint, ref1, ref2, label_format):
-    
-    """
-    get xlimits and ticks relative to ref1 and ref2
-    """
+    """get xlimits and ticks relative to ref1 and ref2"""
     
     xmin = int(np.ceil(time[ref1] + t1))
     xmax_0 = int(np.floor(time[ref2] + t2))
@@ -67,10 +58,8 @@ def format_xaxis(time, t1, t2, nint, ref1, ref2, label_format):
     
     
 def tick_info(axmin, axmax, axint, label_format):
+    """get tick info including labels"""
     
-    """
-    get tick info including labels
-    """
     axticks = np.arange(axmin, axmax + axint, axint)
     axticklabels = [label_format.format(tick) for tick in axticks]
     

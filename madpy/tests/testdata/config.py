@@ -8,7 +8,12 @@ class Amplitude:
     signal_phase: str = 'S'
     signal_window_begin: float = -1.
     signal_window_end: float = 30.
+    amp_factor: float = 0.5
+    save_output: bool = False
+    output_path: str = '.'
     plot: bool = False
+    save_figure: bool = False
+    figure_path: str = '.'
 
 @dataclass(init=False)
 class Duration:
@@ -24,4 +29,8 @@ class Duration:
     threshold_type: str = 'absolute'
     duration_noise_threshold: float = 2.
     duration_absolute_threshold: float = -10.
+    save_output: bool = False
+    output_path: str = '.'
     plot: bool = False
+    save_figure: bool = False
+    figure_path: str = '.'

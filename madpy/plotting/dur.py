@@ -1,17 +1,20 @@
-# Installed 
+"""
+dur.py
+
+plot duration measurement
+"""
+
 import numpy as np
 from matplotlib import markers
-from scipy.signal import hilbert
 import matplotlib.pyplot as plt
+from scipy.signal import hilbert
 from matplotlib.path import Path
-
-# Local 
 import madpy.duration as duration
 import madpy.plotting.utils as util
 import madpy.plotting.params as params
 
-PLOT_PHASE = 'O'
 
+PLOT_PHASE = 'O'
 
 def duration_plot(tr, avg_time, avg_data_lin, avg_data_log, 
                   fit_start, fit_end, dur, cc, 
@@ -31,7 +34,7 @@ def duration_plot(tr, avg_time, avg_data_lin, avg_data_log,
     # plot parameters
     pp = params.duration_plot_parameters()
     xlabel = 'Time'
-    title = r'$\tau$ = {:0.3f} s, CC = –{:0.2f}'.format(dur, np.abs(cc))
+    title = r'{:s}: $\tau$ = {:0.3f} s, CC = –{:0.2f}'.format(tr.id, dur, np.abs(cc))
     if ptype == 'linear':
         full_data = tr.data
         avg_data = avg_data_lin
@@ -77,7 +80,8 @@ def duration_plot(tr, avg_time, avg_data_lin, avg_data_log,
     plt.tight_layout()
     plt.close()
     
-    return fig
+    if cfg.save_figure:
+        fig.savefig(f'{cfg.figure_path}/dur-{ptype}-{tr.id}.png')
     
                
 def format_duration_yaxis(time, tr, xinfo, yspace, nint, ptype, label_format):

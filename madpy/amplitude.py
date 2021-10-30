@@ -4,62 +4,53 @@ amplitude.py
 measure the maximum peak-to-peak amplitude
 """
 
-# Installed 
 import obspy
 import types
 import numpy as np
 import pandas as pd
-from typing import Tuple
-import matplotlib.pyplot as plt
-
-# Local 
 import madpy.noise as n
+from typing import Tuple
 import madpy.checks as ch
 import madpy.config as config
+import matplotlib.pyplot as plt
 import madpy.plotting.amp as plot
 
 
 def measure_amplitude(
     st: obspy.Stream, 
     cfg: types.ModuleType = config, 
-    save_output: bool = False, 
-    outfile: str = None
-) -> Tuple[pd.DataFrame, plt.figure]:
+) -> pd.DataFrame:
     """Measure noise level and amplitude
 
     Args:
         st: stream containing one or more time series
         cfg: configuration file
-        save_output: choose to save output
-        outfile: output file to save output
         
     Returns:
         df: dataframe of time series amplitude information
-        fig: amplitude figure
 
     """
     
     output = []
     for tr in st:
     
-        preliminary_checks(tr, save_output, outfile, cfg)
+        preliminary_checks(tr, cfg)
         noise = n.rms_noise(tr, 'amplitude', cfg)
-        amplitude, fig = max_amplitude(tr, noise, cfg)
+        amplitude = max_amplitude(tr, noise, cfg)
         output.append([str(tr.stats.o.date), str(tr.stats.o.time)[:11],
                        tr.stats.network, tr.stats.station, tr.stats.channel,
                        amplitude, noise])
         
     df = format_output(output)
-    if save_output:
-        df.to_csv(f'{outfile}', float_format='%0.5f', index=False)
+    if cfg.Amplitude.save_output:
+        df.to_csv(f'{cfg.Amplitude.output_path}/amp-output.csv', 
+                  float_format='%0.5f', index=False)
         
-    return df, fig
+    return df
 
 
 def preliminary_checks(
-    tr: obspy.Trace, 
-    save_output: bool, 
-    outfile: str, 
+    tr: obspy.Trace,  
     cfg: types.ModuleType = config
 ) -> None:
     """Make sure all necessary information is present
@@ -68,12 +59,9 @@ def preliminary_checks(
     1. The configuration file is setup correctly
     2. The trace has all relevant information
     3. There is sufficient time series data
-    4. An outfile is specified if output is desired
     
     Args:
         tr: time series
-        save_output: choose to save output
-        outfile: output file to save output
         cfg: configuration file
         
     Returns:
@@ -83,7 +71,6 @@ def preliminary_checks(
     
     ch.check_config(cfg.Amplitude())
     ch.check_waveform(tr)
-    ch.check_outfile(save_output, outfile)        
         
     return None
 
@@ -92,7 +79,7 @@ def max_amplitude(
     tr: obspy.Trace, 
     noise: float, 
     cfg: types.ModuleType = config
-) -> Tuple[float, plt.figure]:
+) -> float:
     """Measure maximum peak-to-peak amplitude
     
     Args:
@@ -102,29 +89,25 @@ def max_amplitude(
     
     Returns: 
         amp: maximum peak-to-peak amplitude
-        fig: amplitude figure
         
     Raises:
         ValueError: if max amplitude is not real and positive
     
     """
     
+    acfg = cfg.Amplitude()
     tr_signal = trim_waveform_signal(tr.copy())
     peaks_nan = inflection_points(tr_signal.data)
     peaks = remove_nan(peaks_nan)
     p2p_amplitudes = np.diff(peaks)
-    # TO-DO: Add amplitude factor to config parameters
-    amp = np.max(np.abs(p2p_amplitudes)) / 2
+    amp = np.max(np.abs(p2p_amplitudes)) * acfg.amp_factor
     ch.check_amplitude(amp)
     
-    acfg = config.Amplitude()
     if acfg.plot:
         indices = p2p_indices(tr_signal, peaks, p2p_amplitudes)
-        fig = plot.amplitude_plot(tr, tr_signal, amp, indices, noise)
-    else:
-        fig = None
+        plot.amplitude_plot(tr, tr_signal, amp, indices, noise, acfg)
         
-    return amp, fig
+    return amp
 
 
 def trim_waveform_signal(

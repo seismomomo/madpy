@@ -4,68 +4,60 @@ duration.py
 measure the duration using the coda envelope
 """
 
-# Installed 
 import obspy
 import types
 import warnings
 import numpy as np
 import pandas as pd
-from typing import Tuple
-import matplotlib.pyplot as plt
-from scipy.signal import hilbert
-from threadpoolctl import threadpool_limits
-from scipy.optimize import lsq_linear as lsq
-
-# Local 
 import madpy.noise as n
+from typing import Tuple
 import madpy.checks as ch
 import madpy.config as config
+import matplotlib.pyplot as plt
+from scipy.signal import hilbert
 import madpy.plotting.dur as plot
+from threadpoolctl import threadpool_limits
+from scipy.optimize import lsq_linear as lsq
 
 
 def measure_duration(
     st: obspy.Stream, 
     cfg: types.ModuleType = config, 
     ptype: str ='log', 
-    save_output: bool = False, 
-    outfile: str = None
-) -> Tuple[pd.DataFrame, plt.figure]:
+) -> pd.DataFrame:
     """Measure noise level and duration
 
     Args:
         st: stream containing one or more time series
         cfg: configuration file
-        save_output: choose to save output
-        outfile: output file to save output
+        ptype: plot type [linear, log]
         
     Returns:
         df: dataframe of time series duration information
-        fig: duration figure
 
     """    
     
     output = []   
     for tr in st:
         
-        preliminary_checks(tr, ptype, save_output, outfile, cfg)
+        preliminary_checks(tr, ptype, cfg)
         noise = n.rms_noise(tr.copy(), 'duration', cfg)
-        duration, cc, fig = coda_duration(tr.copy(), noise, ptype, cfg)
+        duration, cc = coda_duration(tr.copy(), noise, ptype, cfg)
         output.append([str(tr.stats.o.date), str(tr.stats.o.time)[:11],
                        tr.stats.network, tr.stats.station, tr.stats.channel,
-                       duration, cc, noise])
+                       duration, cc, np.log10(noise)])
 
     df = format_output(output)
-    if save_output:
-        df.to_csv(f'{outfile}', float_format='%0.5f', index=False)
+    if cfg.Duration.save_output:
+        df.to_csv(f'{cfg.Duration.output_path}/dur-output.csv', 
+                  float_format='%0.5f', index=False)
         
-    return df, fig
+    return df
 
 
 def preliminary_checks(
     tr: obspy.Trace, 
-    ptype: str,
-    save_output: bool, 
-    outfile: str, 
+    ptype: str, 
     cfg: types.ModuleType = config
 ) -> None:
     """Make sure all necessary information is present
@@ -74,12 +66,10 @@ def preliminary_checks(
     1. The configuration file is setup correctly
     2. The trace has all relevant information
     3. There is sufficient time series data
-    4. An outfile is specified if output is desired
     
     Args:
         tr: time series
-        save_output: choose to save output
-        outfile: output file to save output
+        ptype: plot type
         cfg: configuration file
         
     Returns:
@@ -89,7 +79,6 @@ def preliminary_checks(
     
     ch.check_config(cfg.Duration())
     ch.check_waveform(tr)
-    ch.check_outfile(save_output, outfile)
     ch.check_plottype(ptype)       
         
     return None
@@ -100,19 +89,18 @@ def coda_duration(
     noise: float, 
     ptype: str, 
     cfg: types.ModuleType = config
-) -> Tuple[float, float, plt.figure]:    
+) -> Tuple[float, float]:    
     """Measure duration and associate quality control
     
     Args:
         tr: time series
         noise: noise level
-        ptype: plot type [linear, log]
+        ptype: plot type 
         cfg: configuration file
         
     Returns:
         dur: duration in seconds
         cc: correlation coefficient
-        fig: duration figure
     
     """
 
@@ -131,10 +119,8 @@ def coda_duration(
         fig = plot.duration_plot(tr, avg_time, avg_data_lin, avg_data_log, 
                                  fit_begin, fit_end, dur, cc, coda_line, 
                                  noise, ptype, dcfg)
-    else:
-        fig = None
    
-    return dur, cc, fig
+    return dur, cc
 
 
 def moving_average(

@@ -1,13 +1,8 @@
-# Installed imports
-import sys
 import obspy
 import unittest
 import numpy as np
-sys.path.insert(0, '../../')
-
-# Local imports
 import madpy.noise as n
-import testdata.config as cfg
+import madpy.tests.testdata.config as cfg
 
 
 class TestNoise(unittest.TestCase):

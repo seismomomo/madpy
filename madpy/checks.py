@@ -23,7 +23,11 @@ def check_config(c):
         
         check_common_config(c)
         
-        if (hasattr(c, 'moving_average_window') and
+        if hasattr(c, 'amp_factor'):
+            
+            check_amplitude_config(c)
+            
+        elif (hasattr(c, 'moving_average_window') and
             hasattr(c, 'start_fit_max') and
             hasattr(c, 'end_fit_noise') and 
             hasattr(c, 'threshold_type') and
@@ -31,7 +35,7 @@ def check_config(c):
             hasattr(c, 'duration_absolute_threshold')):
             
             check_duration_config(c)
-
+            
     else:
         
         raise AttributeError('''Missing attributes common to 
@@ -73,12 +77,46 @@ def check_common_config(c):
     assert c.signal_window_end - c.signal_window_begin > 0, \
         f'''(ValueError) 
         Noise window length must be greater than zero'''
+    assert isinstance(c.save_output, bool), \
+        f'''(TypeError)
+        Save output {c.save_output} must be a boolean'''
+    assert isinstance(c.output_path, str), \
+        f'''(TypeError)
+        Output path {c.output_path} must be a string'''
+    if c.save_output:
+        assert len(c.output_path) > 0, \
+            f'''(ValueError) 
+            Output path must be specified if save_output=True'''
     assert isinstance(c.plot, bool), \
         f'''(TypeError) 
         Plot type {c.plot} must be a boolean'''
+    assert isinstance(c.save_figure, bool), \
+        f'''(TypeError) 
+        Save figure {c.save_figure} must be a boolean'''
+    assert isinstance(c.figure_path, str), \
+        f'''(TypeError)
+        Figure path {c.figure_path} must be a string'''
+    if c.save_figure:
+        assert c.plot, \
+            f'''(ValueError)
+            Plot must be generated if save_figure=True'''
+        assert len(c.figure_path) > 0, \
+            f'''(ValueError)
+            Figure path must be specified if save_figure=True'''
     
     return None
 
+def check_amplitude_config(c):
+    """Check attributes for class Amplitude"""
+    
+    assert isinstance(c.amp_factor, float), \
+        f'''(TypeError)
+        Amplitude factor {c.amp_factor} must be a float'''
+    assert c.amp_factor > 0, \
+        f'''(ValueError)
+        Amplitude factor {c.amp_factor} must be greater than 0'''
+    
+    return None
 
 def check_duration_config(c):
     """Check attributes for class Duration"""
@@ -187,23 +225,6 @@ def check_window(tr, starttime, endtime):
         f'''(ValueError) 
         Window end ({endtime}) is later than 
         Trace end ({tr.stats.endtime})'''
-        
-    return None
-    
-
-def check_outfile(save_output, outfile):
-    """Verify the output file is provided if needed"""
-    
-    assert isinstance(save_output, bool), \
-        f'''(TypeError) 
-        Save option {save_output} should be boolean'''
-    if save_output:
-        assert outfile is not None, \
-            '''(ValueError) 
-            Output file must be specified'''
-        assert isinstance(outfile, str), \
-            f'''(ValueError) 
-            Output file {outfile} should be a string'''
         
     return None
 

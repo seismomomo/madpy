@@ -1,13 +1,9 @@
-# Installed imports
-import sys
 import obspy
 import unittest
 import numpy as np
-sys.path.insert(0, '../../')
-
-# Local imports
 import madpy.checks as ch
-import testdata.config as cfg
+import madpy.tests.testdata.config as cfg
+
 
 class TestChecks(unittest.TestCase):
             
@@ -19,11 +15,17 @@ class TestChecks(unittest.TestCase):
         cfg.Amplitude.noise_phase = 'Pn'
         self.assertRaises(AssertionError, ch.check_config, cfg.Amplitude())
         cfg.Amplitude.noise_phase = 'P'
+        cfg.Amplitude.amp_factor = -2.
+        self.assertRaises(AssertionError, ch.check_config, cfg.Amplitude())
         cfg.Amplitude.plot = 'Yes'
         self.assertRaises(AssertionError, ch.check_config, cfg.Amplitude())
         cfg.Amplitude.plot = False
         cfg.Amplitude.signal_window_begin = 50.
         self.assertRaises(AssertionError, ch.check_config, cfg.Amplitude())
+        cfg.Amplitude.signal_window_begin = -1
+        cfg.Amplitude.save_figure = True
+        self.assertRaises(AssertionError, ch.check_config, cfg.Amplitude())
+        cfg.Amplitude.save_figure = False
         
         self.assertIsNone(ch.check_config(cfg.Duration()))
         cfg.Duration.signal_phase = 'Sg'
@@ -34,6 +36,14 @@ class TestChecks(unittest.TestCase):
         cfg.moving_average_window = 2
         cfg.threshold_type = 'pre-p noise'
         self.assertRaises(AssertionError, ch.check_config, cfg.Duration())
+        cfg.threshold_type = 'noise'
+        cfg.plot = True
+        cfg.save_figure = True
+        cfg.figure_path = ''
+        self.assertRaises(AssertionError, ch.check_config, cfg.Duration())
+        cfg.plot = False
+        cfg.save_figure = False
+
         
     def test_check_waveform(self):
         
@@ -70,17 +80,6 @@ class TestChecks(unittest.TestCase):
             self.assertRaises(AssertionError, ch.check_window, tr, starttime, endtime)
             endtime = obspy.UTCDateTime('2020-10-10T13:08:00.00')
             self.assertRaises(AssertionError, ch.check_window, tr, starttime, endtime)
-        
-    
-    def test_check_outfile(self):
-        
-        save_output = True
-        outfile = 'test.out'
-        self.assertIsNone(ch.check_outfile(save_output, outfile))
-        outfile = None
-        self.assertRaises(AssertionError, ch.check_outfile, save_output, outfile)
-        outfile = 2
-        self.assertRaises(AssertionError, ch.check_outfile, save_output, outfile)
         
         
     def test_check_amplitude(self):

@@ -1,23 +1,21 @@
 """
-amplitude.py
+amp.py
 
 plot amplitude measurement
 """
 
-# Installed 
 import numpy as np
 from matplotlib import markers
-from scipy.signal import hilbert
 import matplotlib.pyplot as plt
+from scipy.signal import hilbert
 from matplotlib.path import Path
-
-# Local 
 import madpy.plotting.utils as util
 import madpy.plotting.params as params
 
+
 PLOT_PHASE = 'O'
 
-def amplitude_plot(tr_full, tr_signal, amp, indices, noise):
+def amplitude_plot(tr_full, tr_signal, amp, indices, noise, cfg):
     """Generate amplitude plot"""
     
     # plot info
@@ -66,7 +64,8 @@ def amplitude_plot(tr_full, tr_signal, amp, indices, noise):
     plt.tight_layout()
     plt.close()
     
-    return fig
+    if cfg.save_figure:
+        fig.savefig(f'{cfg.figure_path}/amp-{tr_full.id}.png')
     
     
 def relative_p2p_indices(tr_full, tr_signal, indices):

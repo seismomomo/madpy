@@ -1,13 +1,8 @@
-# Installed imports
-import sys
 import obspy
 import unittest
 import numpy as np
-sys.path.insert(0, '../../')
-
-# Local imports
 import madpy.duration as dur
-import testdata.config as cfg
+import madpy.tests.testdata.config as cfg
 
 
 class TestAmplitude(unittest.TestCase):
@@ -20,7 +15,7 @@ class TestAmplitude(unittest.TestCase):
         st[0].stats.p = 10.
         st[0].stats.s = 20.
         
-        df_dur,_ = dur.measure_duration(st, cfg)
+        df_dur = dur.measure_duration(st, cfg)
         self.assertEqual(len(df_dur), len(st))
         self.assertEqual(len(df_dur.columns), 8) 
         
@@ -32,7 +27,7 @@ class TestAmplitude(unittest.TestCase):
         st[0].stats.p = 10.
         st[0].stats.s = 20.
 
-        duration, cc, fig = dur.coda_duration(st[0], 10 ** -10, 'linear', cfg)
+        duration, cc = dur.coda_duration(st[0], 10 ** -10, 'linear', cfg)
         self.assertAlmostEqual(duration, 175, 0)
         self.assertAlmostEqual(cc, -0.72, 2)
         
