@@ -1,28 +1,32 @@
 import matplotlib
 params = {
     'text.latex.preamble': r'\usepackage{bm} \usepackage{amsmath}',
-    'image.origin': 'lower',
-    'image.interpolation': 'nearest',
-    'image.cmap': 'gray',
-    'savefig.dpi': 300,  
+    'axes.facecolor': 'w',
     'axes.labelsize': 14, 
+    'axes.linewidth': 1.25,
     'axes.titlesize': 16,
-    'axes.linewidth': 1,
+    'errorbar.capsize': 6,
+    'font.family': 'sans-serif',
     'font.size': 14, 
+    'image.cmap': 'gray',
+    'image.interpolation': 'nearest',
+    'image.origin': 'lower',
+    'legend.edgecolor': 'k',
+    'legend.fancybox': True,
     'legend.fontsize': 12, 
+    'legend.framealpha': 0.7,
+    'savefig.facecolor': 'w',
+    'savefig.dpi': 300,
     'xtick.labelsize': 12,
-    'ytick.labelsize': 12,
     'xtick.major.width' : 1,
     'xtick.minor.width' : 0.5,
     'xtick.major.size' : 8,
     'xtick.minor.size' : 4,
+    'ytick.labelsize': 12,
     'ytick.major.width' : 1,
     'ytick.minor.width': 0.5,
     'ytick.major.size': 8,
-    'ytick.minor.size': 4,
-    'font.family': 'sans-serif',
-    'errorbar.capsize': 6
-    
+    'ytick.minor.size': 4
 }
 matplotlib.rcParams.update(params)
 
