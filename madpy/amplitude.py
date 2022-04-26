@@ -37,7 +37,9 @@ def measure_amplitude(
         preliminary_checks(tr, cfg)
         noise = n.rms_noise(tr, 'amplitude', cfg)
         amplitude = max_amplitude(tr, noise, cfg)
-        output.append([str(tr.stats.o.date), str(tr.stats.o.time)[:11],
+        date_formatted = tr.stats.o.strftime('%Y-%m-%d')
+        time_formatted = tr.stats.o.strftime('%H:%M:%S.%f')
+        output.append([date_formatted, time_formatted[:11],
                        tr.stats.network, tr.stats.station, tr.stats.channel,
                        amplitude, noise])
         

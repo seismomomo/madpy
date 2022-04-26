@@ -43,7 +43,9 @@ def measure_duration(
         preliminary_checks(tr, ptype, cfg)
         noise = n.rms_noise(tr.copy(), 'duration', cfg)
         duration, cc = coda_duration(tr.copy(), noise, ptype, cfg)
-        output.append([str(tr.stats.o.date), str(tr.stats.o.time)[:11],
+        date_formatted = tr.stats.o.strftime('%Y-%m-%d')
+        time_formatted = tr.stats.o.strftime('%H:%M:%S.%f')
+        output.append([date_formatted, time_formatted[:11],
                        tr.stats.network, tr.stats.station, tr.stats.channel,
                        duration, cc, np.log10(noise)])
 
